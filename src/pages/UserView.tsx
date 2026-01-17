@@ -1,45 +1,34 @@
 import { motion } from "framer-motion";
 import { 
   Settings, Shield, ChevronRight, ShoppingBag, 
-  Syringe, BellOff, Eye, ArrowLeft
+  Syringe, Check
 } from "lucide-react";
-import { Link } from "react-router-dom";
 import { useState } from "react";
+import { ViewToggle } from "@/components/ahead/ViewToggle";
+import { PendingSuggestion } from "@/components/ahead/PendingSuggestion";
 
 const activityLog = [
   {
     id: 1,
     type: "order" as const,
-    title: "Immunity supplements ordered",
+    title: "Immunity supplements",
     time: "Saturday, 9:15 AM",
     status: "Delivered",
-    confidence: 87,
-    threshold: 80,
+    reason: "Your calendar showed a pitch Thursday. AHEAD ordered supplements 72 hours ahead for best effectiveness.",
   },
   {
     id: 2,
-    type: "silence" as const,
-    title: "3 considerations, no action",
-    time: "Sunday - Tuesday",
-    status: "Below threshold",
-    confidence: 55,
-    threshold: 80,
-  },
-  {
-    id: 3,
     type: "booking" as const,
-    title: "IV therapy booked",
+    title: "IV therapy session",
     time: "Tuesday, 3:45 PM",
-    status: "Completed",
-    confidence: 91,
-    threshold: 85,
+    status: "Confirmed",
+    reason: "Scheduled 36 hours before your pitch — optimal timing for hydration and immune support.",
   },
 ];
 
 const typeConfig = {
   order: { icon: ShoppingBag, color: "text-primary", bg: "bg-primary/10" },
   booking: { icon: Syringe, color: "text-accent", bg: "bg-accent/10" },
-  silence: { icon: BellOff, color: "text-muted-foreground", bg: "bg-muted" },
 };
 
 const UserView = () => {
@@ -55,17 +44,16 @@ const UserView = () => {
         <motion.div
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="flex items-center justify-between mb-6"
+          className="flex items-center justify-between mb-4"
         >
-          <Link 
-            to="/demo" 
-            className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            Back to demo
-          </Link>
+          <h1 className="text-xl font-bold">
+            <span className="ahead-gradient-text">AHEAD</span>
+          </h1>
           <Settings className="w-5 h-5 text-muted-foreground" />
         </motion.div>
+
+        {/* View Toggle */}
+        <ViewToggle />
 
         {/* Greeting */}
         <motion.div
@@ -73,11 +61,11 @@ const UserView = () => {
           animate={{ opacity: 1, y: 0 }}
           className="mb-6"
         >
-          <h1 className="text-2xl font-bold text-foreground">Good evening, James</h1>
-          <p className="text-sm text-muted-foreground mt-1">Thursday · Pitch day complete</p>
+          <h2 className="text-2xl font-bold text-foreground">Good evening, James</h2>
+          <p className="text-sm text-muted-foreground mt-1">Thursday · Pitch day</p>
         </motion.div>
 
-        {/* Status Card */}
+        {/* Status Card - Simplified */}
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
@@ -89,23 +77,22 @@ const UserView = () => {
               <Shield className="w-6 h-6 text-risk-low" />
             </div>
             <div className="flex-1">
-              <h2 className="font-semibold text-foreground">Protection Complete</h2>
-              <p className="text-sm text-muted-foreground">2 interventions · 4 silences</p>
+              <h3 className="font-semibold text-foreground">Ready for your pitch</h3>
+              <p className="text-sm text-muted-foreground">AHEAD handled 2 things this week</p>
             </div>
-            <div className="text-right">
-              <p className="text-2xl font-bold text-risk-low">89%</p>
-              <p className="text-[10px] text-muted-foreground">confidence</p>
+            <div className="p-2 rounded-full bg-risk-low/10">
+              <Check className="w-5 h-5 text-risk-low" />
             </div>
           </div>
         </motion.div>
 
-        {/* Activity Log */}
+        {/* Activity Log - Simplified */}
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
         >
-          <h3 className="text-sm font-semibold text-foreground mb-3">This Week's Activity</h3>
+          <h3 className="text-sm font-semibold text-foreground mb-3">This Week</h3>
           
           <div className="space-y-2">
             {activityLog.map((activity, index) => {
@@ -133,7 +120,10 @@ const UserView = () => {
                         <p className="text-xs text-muted-foreground">{activity.time}</p>
                       </div>
                       <div className="flex items-center gap-2">
-                        <span className="text-xs text-muted-foreground">{activity.status}</span>
+                        <span className="flex items-center gap-1 text-xs text-risk-low">
+                          <Check className="w-3 h-3" />
+                          {activity.status}
+                        </span>
                         <motion.div
                           animate={{ rotate: isSelected ? 90 : 0 }}
                           transition={{ duration: 0.2 }}
@@ -143,41 +133,15 @@ const UserView = () => {
                       </div>
                     </div>
 
-                    {/* Expanded reasoning */}
+                    {/* Expanded reasoning - Human readable */}
                     {isSelected && (
                       <motion.div
                         initial={{ opacity: 0, height: 0 }}
                         animate={{ opacity: 1, height: "auto" }}
                         className="mt-3 pt-3 border-t border-border/50"
                       >
-                        <div className="flex items-center gap-2 text-xs text-muted-foreground mb-2">
-                          <Eye className="w-3.5 h-3.5" />
-                          <span>Decision reasoning</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <div className="flex-1 h-1.5 bg-muted rounded-full overflow-hidden relative">
-                            <div
-                              className={`h-full rounded-full ${
-                                activity.confidence >= activity.threshold
-                                  ? "bg-primary"
-                                  : "bg-muted-foreground/30"
-                              }`}
-                              style={{ width: `${activity.confidence}%` }}
-                            />
-                            <div
-                              className="absolute top-0 bottom-0 w-0.5 bg-foreground/30"
-                              style={{ left: `${activity.threshold}%` }}
-                            />
-                          </div>
-                          <span className="text-xs">
-                            <span className="font-semibold text-foreground">{activity.confidence}%</span>
-                            <span className="text-muted-foreground"> / {activity.threshold}%</span>
-                          </span>
-                        </div>
-                        <p className="text-xs text-muted-foreground mt-2">
-                          {activity.confidence >= activity.threshold
-                            ? "Confidence exceeded threshold → Action taken"
-                            : "Confidence below threshold → Stayed silent"}
+                        <p className="text-sm text-muted-foreground text-left">
+                          {activity.reason}
                         </p>
                       </motion.div>
                     )}
@@ -186,6 +150,19 @@ const UserView = () => {
               );
             })}
           </div>
+        </motion.div>
+
+        {/* Pending Suggestion */}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5 }}
+          className="mt-6"
+        >
+          <PendingSuggestion
+            title="Book a recovery session?"
+            description="Saturday morning at Restore Hyper Wellness. Help your body bounce back after the pitch week."
+          />
         </motion.div>
 
         {/* Footer */}
