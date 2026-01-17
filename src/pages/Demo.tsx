@@ -14,6 +14,7 @@ import { TrustSettings } from "@/components/ahead/TrustSettings";
 import { AIComparison } from "@/components/ahead/AIComparison";
 import { StakesOutcome } from "@/components/ahead/StakesOutcome";
 import { ViewToggle } from "@/components/ahead/ViewToggle";
+import { ContextNudge } from "@/components/ahead/ContextNudge";
 
 export type DemoDay = "sunday" | "monday" | "tuesday" | "wednesday" | "thursday" | "friday" | "saturday" | "new-sunday";
 
@@ -117,6 +118,7 @@ const Demo = () => {
   const [currentDay, setCurrentDay] = useState<DemoDay>("sunday");
   const [isPlaying, setIsPlaying] = useState(false);
   const [showLearning, setShowLearning] = useState(false);
+  const [showHandwashNudge, setShowHandwashNudge] = useState(true);
 
   const days: DemoDay[] = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "new-sunday"];
   const currentIndex = days.indexOf(currentDay);
@@ -445,6 +447,15 @@ const Demo = () => {
             {/* Wednesday - Monitoring + expanded silence log */}
             {currentDay === "wednesday" && (
               <>
+                {/* Handwashing Nudge */}
+                {showHandwashNudge && (
+                  <ContextNudge
+                    message="Wash hands before and after each event today"
+                    location="Triggered by: Founders Club dinner (high-density venue)"
+                    onDismiss={() => setShowHandwashNudge(false)}
+                    confidence={78}
+                  />
+                )}
                 {/* Today's Schedule */}
                 <motion.div
                   initial={{ opacity: 0, y: 10 }}
@@ -463,8 +474,8 @@ const Demo = () => {
                     </div>
                   </div>
                   <div className="mt-3 pt-3 border-t border-border/50">
-                    <p className="text-xs text-primary font-medium">
-                      💧 Wash hands before and after each event
+                    <p className="text-xs text-muted-foreground">
+                      ✓ Nudge sent: Handwashing reminder
                     </p>
                   </div>
                 </motion.div>
