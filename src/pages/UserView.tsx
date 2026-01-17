@@ -1,7 +1,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { 
   Settings, Shield, ChevronRight, ShoppingBag, 
-  Syringe, Check, Undo2
+  Syringe, Check, ThumbsUp, ThumbsDown
 } from "lucide-react";
 import { useState } from "react";
 import { ViewToggle } from "@/components/ahead/ViewToggle";
@@ -11,17 +11,18 @@ const initialActivityLog = [
     id: 1,
     type: "order" as const,
     title: "Immunity supplements",
-    time: "Saturday, 9:15 AM",
+    time: "Tuesday, 12:30 PM",
     status: "Delivered",
-    reason: "Stress weakens your immune system. AHEAD ordered supplements 72 hours before your pitch to keep your defenses strong against colds.",
+    reason: "Ordered Monday morning based on your stress levels. Arrived Tuesday, giving you 48 hours of immune support before your Thursday pitch.",
   },
   {
     id: 2,
     type: "booking" as const,
-    title: "Immune Boost IV",
-    time: "Wednesday, 8:30 PM",
+    title: "Mobile IV Therapy",
+    subtitle: "Immune Boost · In-home service",
+    time: "Wednesday, 7:00 PM",
     status: "Completed",
-    reason: "IV therapy delivered 12 hours before pitch. High-dose vitamin C and zinc provide peak immune support for Thursday.",
+    reason: "AHEAD booked a mobile IV therapist to come to your home Wednesday evening. High-dose vitamin C and zinc infusion for peak immunity on pitch day. No travel, no waiting room.",
   },
 ];
 
@@ -32,17 +33,14 @@ const typeConfig = {
 
 const UserView = () => {
   const [selectedActivity, setSelectedActivity] = useState<number | null>(null);
-  const [activityLog, setActivityLog] = useState(initialActivityLog);
-  const [undoneItems, setUndoneItems] = useState<typeof initialActivityLog>([]);
+  const [activityLog] = useState(initialActivityLog);
+  const [feedbackGiven, setFeedbackGiven] = useState<Record<number, 'positive' | 'negative'>>({});
 
-  const handleUndo = (activityId: number) => {
-    const item = activityLog.find(a => a.id === activityId);
-    if (item) {
-      setUndoneItems(prev => [...prev, item]);
-      setActivityLog(prev => prev.filter(a => a.id !== activityId));
-      setSelectedActivity(null);
-    }
+  const handleFeedback = (activityId: number, type: 'positive' | 'negative') => {
+    setFeedbackGiven(prev => ({ ...prev, [activityId]: type }));
   };
+
+  const hasFeedback = Object.keys(feedbackGiven).length > 0;
 
   return (
     <div className="min-h-screen bg-background">
@@ -109,6 +107,7 @@ const UserView = () => {
                 const config = typeConfig[activity.type];
                 const Icon = config.icon;
                 const isSelected = selectedActivity === activity.id;
+                const feedback = feedbackGiven[activity.id];
 
                 return (
                   <motion.div
@@ -129,6 +128,9 @@ const UserView = () => {
                         </div>
                         <div className="flex-1 text-left">
                           <p className="text-sm font-medium text-foreground">{activity.title}</p>
+                          {'subtitle' in activity && activity.subtitle && (
+                            <p className="text-xs text-muted-foreground/80">{activity.subtitle}</p>
+                          )}
                           <p className="text-xs text-muted-foreground">{activity.time}</p>
                         </div>
                         <div className="flex items-center gap-2">
@@ -145,7 +147,7 @@ const UserView = () => {
                         </div>
                       </div>
 
-                      {/* Expanded reasoning + Undo */}
+                      {/* Expanded reasoning + Feedback */}
                       <AnimatePresence>
                         {isSelected && (
                           <motion.div
@@ -162,13 +164,34 @@ const UserView = () => {
                               className="flex justify-end items-center"
                               onClick={(e) => e.stopPropagation()}
                             >
-                              <button
-                                onClick={() => handleUndo(activity.id)}
-                                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-muted-foreground hover:bg-muted hover:text-foreground transition-colors"
-                              >
-                                <Undo2 className="w-3 h-3" />
-                                Undo this action
-                              </button>
+                              {feedback ? (
+                                <motion.div
+                                  initial={{ opacity: 0, scale: 0.9 }}
+                                  animate={{ opacity: 1, scale: 1 }}
+                                  className="flex items-center gap-1.5 text-xs text-risk-low"
+                                >
+                                  <Check className="w-3 h-3" />
+                                  AHEAD will remember this
+                                </motion.div>
+                              ) : (
+                                <div className="flex items-center gap-2">
+                                  <span className="text-xs text-muted-foreground mr-1">Was this helpful?</span>
+                                  <button
+                                    onClick={() => handleFeedback(activity.id, 'positive')}
+                                    className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-medium text-muted-foreground hover:bg-risk-low/10 hover:text-risk-low transition-colors"
+                                  >
+                                    <ThumbsUp className="w-3 h-3" />
+                                    Yes
+                                  </button>
+                                  <button
+                                    onClick={() => handleFeedback(activity.id, 'negative')}
+                                    className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-medium text-muted-foreground hover:bg-muted hover:text-foreground transition-colors"
+                                  >
+                                    <ThumbsDown className="w-3 h-3" />
+                                    No
+                                  </button>
+                                </div>
+                              )}
                             </div>
                           </motion.div>
                         )}
@@ -181,17 +204,17 @@ const UserView = () => {
           </div>
         </motion.div>
 
-        {/* Undone items notice */}
+        {/* Feedback notice */}
         <AnimatePresence>
-          {undoneItems.length > 0 && (
+          {hasFeedback && (
             <motion.div
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
-              className="mt-4 p-3 rounded-xl bg-muted/50 border border-border/50"
+              className="mt-4 p-3 rounded-xl bg-risk-low/10 border border-risk-low/20"
             >
-              <p className="text-xs text-muted-foreground text-center">
-                {undoneItems.length} action{undoneItems.length > 1 ? 's' : ''} undone. AHEAD will learn from this.
+              <p className="text-xs text-risk-low text-center font-medium">
+                ✓ AHEAD is learning from your feedback
               </p>
             </motion.div>
           )}
