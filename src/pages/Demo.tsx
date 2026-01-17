@@ -358,6 +358,20 @@ const Demo = () => {
             {/* Monday - Supplement order with full reasoning */}
             {currentDay === "monday" && (
               <>
+                {/* Today's Schedule */}
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="ahead-card mb-4"
+                >
+                  <h4 className="text-sm font-semibold text-foreground mb-3">Today's Schedule</h4>
+                  <div className="space-y-2 text-xs">
+                    <div className="flex items-center justify-between">
+                      <span className="text-muted-foreground">10:00 AM · Team standup</span>
+                      <span className="text-risk-low font-medium">Low risk</span>
+                    </div>
+                  </div>
+                </motion.div>
                 <AutonomousAction
                   type="order"
                   title="Vive Organic Immunity Boost Shots"
@@ -384,6 +398,29 @@ const Demo = () => {
             {/* Tuesday - IV booking with reasoning */}
             {currentDay === "tuesday" && (
               <>
+                {/* Today's Schedule */}
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="ahead-card mb-4"
+                >
+                  <h4 className="text-sm font-semibold text-foreground mb-3">Today's Schedule</h4>
+                  <div className="space-y-2 text-xs">
+                    <div className="flex items-center justify-between">
+                      <span className="text-muted-foreground">9:00 AM · Investor coffee</span>
+                      <span className="text-risk-medium font-medium">Medium risk</span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-muted-foreground">6:00 PM · Networking happy hour</span>
+                      <span className="text-risk-high font-medium">High risk</span>
+                    </div>
+                  </div>
+                  <div className="mt-3 pt-3 border-t border-border/50">
+                    <p className="text-xs text-primary font-medium">
+                      ⚠️ High-traffic venue expected tonight. AHEAD escalating protection.
+                    </p>
+                  </div>
+                </motion.div>
                 <IVBookingCard
                   provider="The IV Pros"
                   treatment="Immune Boost IV Drip"
@@ -408,29 +445,34 @@ const Demo = () => {
             {/* Wednesday - Monitoring + expanded silence log */}
             {currentDay === "wednesday" && (
               <>
+                {/* Today's Schedule */}
                 <motion.div
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="ahead-card"
+                  className="ahead-card mb-4"
                 >
-                  <div className="flex items-center gap-3">
-                    <div className="p-2 rounded-lg bg-accent/10">
-                      <Sparkles className="w-5 h-5 text-accent" />
+                  <h4 className="text-sm font-semibold text-foreground mb-3">Today's Schedule</h4>
+                  <div className="space-y-2 text-xs">
+                    <div className="flex items-center justify-between">
+                      <span className="text-muted-foreground">12:30 PM · Client lunch</span>
+                      <span className="text-risk-medium font-medium">Medium risk</span>
                     </div>
-                    <div>
-                      <h4 className="font-semibold text-foreground">Founders Club Dinner</h4>
-                      <p className="text-sm text-muted-foreground">7:00 PM · The Battery</p>
-                      <p className="text-xs text-muted-foreground mt-1">
-                        Protection active — monitoring only
-                      </p>
+                    <div className="flex items-center justify-between">
+                      <span className="text-muted-foreground">7:00 PM · Founders Club dinner</span>
+                      <span className="text-risk-high font-medium">High risk</span>
                     </div>
+                  </div>
+                  <div className="mt-3 pt-3 border-t border-border/50">
+                    <p className="text-xs text-primary font-medium">
+                      💧 Wash hands before and after each event
+                    </p>
                   </div>
                 </motion.div>
                 <motion.div
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.1 }}
-                  className="ahead-card mt-4"
+                  className="ahead-card"
                 >
                   <div className="flex items-center gap-3">
                     <div className="p-2 rounded-lg bg-risk-low/10">
@@ -449,6 +491,29 @@ const Demo = () => {
             {/* Thursday - Summary with AI comparison and stakes */}
             {currentDay === "thursday" && (
               <>
+                {/* Today's Schedule */}
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="ahead-card mb-4"
+                >
+                  <h4 className="text-sm font-semibold text-foreground mb-3">Today's Schedule</h4>
+                  <div className="space-y-2 text-xs">
+                    <div className="flex items-center justify-between">
+                      <span className="text-muted-foreground">2:00 PM · Series A pitch</span>
+                      <span className="text-primary font-semibold">CRITICAL</span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-muted-foreground">8:00 PM · Celebration dinner</span>
+                      <span className="text-risk-high font-medium">High risk</span>
+                    </div>
+                  </div>
+                  <div className="mt-3 pt-3 border-t border-border/50">
+                    <p className="text-xs text-risk-low font-medium">
+                      🛡️ All protection measures active
+                    </p>
+                  </div>
+                </motion.div>
                 <AIComparison />
                 <StakesOutcome />
               </>
@@ -645,7 +710,7 @@ const Demo = () => {
           className="mt-8 text-center"
         >
           <p className="text-xs text-muted-foreground">
-            AHEAD: When confident, it acts. When uncertain, it stays silent.
+            AHEAD: Anticipatory Health Early-intervention Advisory Delegate
           </p>
         </motion.footer>
       </div>
