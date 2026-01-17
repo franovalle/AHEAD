@@ -1,0 +1,4 @@
+project_id = "dregyylpigombqtldtud"
+
+[functions.generate-reasoning]
+verify_jwt = false
