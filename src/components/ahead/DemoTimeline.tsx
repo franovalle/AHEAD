@@ -7,8 +7,6 @@ interface DemoTimelineProps {
 }
 
 const days: { key: DemoDay; label: string; short: string }[] = [
-  { key: "friday", label: "Fri", short: "F" },
-  { key: "saturday", label: "Sat", short: "S" },
   { key: "sunday", label: "Sun", short: "S" },
   { key: "monday", label: "Mon", short: "M" },
   { key: "tuesday", label: "Tue", short: "T" },
@@ -40,7 +38,6 @@ export const DemoTimeline = ({ currentDay, onDaySelect }: DemoTimelineProps) => 
         {days.map((day, index) => {
           const isActive = day.key === currentDay;
           const isPast = index < currentIndex;
-          const isFuture = index > currentIndex;
 
           return (
             <button

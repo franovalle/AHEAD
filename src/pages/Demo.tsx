@@ -1,12 +1,10 @@
 import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
-  Sparkles, Shield, Zap, CheckCircle2, Scan, ExternalLink
+  Sparkles, Shield, Zap, CheckCircle2, Scan
 } from "lucide-react";
-import { Link } from "react-router-dom";
 import { DemoTimeline } from "@/components/ahead/DemoTimeline";
 import { AutonomousAction } from "@/components/ahead/AutonomousAction";
-import { ContextNudge } from "@/components/ahead/ContextNudge";
 import { IVBookingCard } from "@/components/ahead/IVBookingCard";
 import { DemoControls } from "@/components/ahead/DemoControls";
 import { SilenceLog } from "@/components/ahead/SilenceLog";
@@ -15,45 +13,34 @@ import { DomainCard } from "@/components/ahead/DomainCard";
 import { TrustSettings } from "@/components/ahead/TrustSettings";
 import { AIComparison } from "@/components/ahead/AIComparison";
 import { StakesOutcome } from "@/components/ahead/StakesOutcome";
+import { ViewToggle } from "@/components/ahead/ViewToggle";
 
-export type DemoDay = "friday" | "saturday" | "sunday" | "monday" | "tuesday" | "wednesday" | "thursday";
+export type DemoDay = "sunday" | "monday" | "tuesday" | "wednesday" | "thursday";
 
 const demoData = {
-  friday: {
-    title: "Friday",
-    subtitle: "5 days before pitch",
+  sunday: {
+    title: "Sunday",
+    subtitle: "4 days before pitch",
     headline: "AHEAD scans your week",
     description: "Analyzing calendar patterns. High-risk week detected: 3 networking events + critical Thursday pitch.",
   },
-  saturday: {
-    title: "Saturday",
-    subtitle: "4 days before pitch",
+  monday: {
+    title: "Monday",
+    subtitle: "3 days before pitch",
     headline: "Preventive action taken",
     description: "Confidence threshold exceeded. Ordering immunity supplements to arrive before exposure events.",
   },
-  sunday: {
-    title: "Sunday",
-    subtitle: "3 days before pitch",
-    headline: "Monitoring continues",
-    description: "Supplements delivered. AHEAD considered additional interventions but stayed silent — confidence below threshold.",
-  },
-  monday: {
-    title: "Monday",
-    subtitle: "2 days before pitch",
-    headline: "Evaluating risk factors",
-    description: "WeWork networking event tonight. AHEAD is monitoring but not intervening — protection protocol already active.",
-  },
   tuesday: {
     title: "Tuesday",
-    subtitle: "1 day before pitch",
+    subtitle: "2 days before pitch",
     headline: "Escalating protection",
     description: "Based on event proximity and stakes, confidence for IV therapy reached 91%. Booking confirmed.",
   },
   wednesday: {
     title: "Wednesday",
-    subtitle: "Night before pitch",
-    headline: "Contextual awareness active",
-    description: "Founders Club dinner tonight. Single contextual nudge delivered at high-confidence moment.",
+    subtitle: "1 day before pitch",
+    headline: "Monitoring continues",
+    description: "Founders Club dinner tonight. AHEAD is monitoring but not intervening — protection protocol active.",
   },
   thursday: {
     title: "Thursday",
@@ -80,12 +67,6 @@ const silenceMoments = {
       confidence: 58,
       threshold: 80,
     },
-    {
-      time: "Monday 3:00 PM",
-      consideration: "Detected elevated stress signals",
-      confidence: 64,
-      threshold: 80,
-    },
   ],
   tuesday: [
     {
@@ -95,15 +76,28 @@ const silenceMoments = {
       threshold: 80,
     },
   ],
+  wednesday: [
+    {
+      time: "Wednesday 3:00 PM",
+      consideration: "Detected elevated stress signals",
+      confidence: 64,
+      threshold: 80,
+    },
+    {
+      time: "Wednesday 7:00 PM",
+      consideration: "Considered handwash reminder at dinner",
+      confidence: 72,
+      threshold: 80,
+    },
+  ],
 };
 
 const Demo = () => {
-  const [currentDay, setCurrentDay] = useState<DemoDay>("friday");
+  const [currentDay, setCurrentDay] = useState<DemoDay>("sunday");
   const [isPlaying, setIsPlaying] = useState(false);
-  const [showNudge, setShowNudge] = useState(false);
   const [showLearning, setShowLearning] = useState(false);
 
-  const days: DemoDay[] = ["friday", "saturday", "sunday", "monday", "tuesday", "wednesday", "thursday"];
+  const days: DemoDay[] = ["sunday", "monday", "tuesday", "wednesday", "thursday"];
   const currentIndex = days.indexOf(currentDay);
   const dayData = demoData[currentDay];
 
@@ -138,16 +132,6 @@ const Demo = () => {
     }
   }, [isPlaying, currentIndex, days]);
 
-  // Show contextual nudge on Wednesday only (reduced from multiple days)
-  useEffect(() => {
-    if (currentDay === "wednesday") {
-      const timer = setTimeout(() => setShowNudge(true), 2000);
-      return () => clearTimeout(timer);
-    } else {
-      setShowNudge(false);
-    }
-  }, [currentDay]);
-
   const goNext = () => {
     if (currentIndex < days.length - 1) {
       setCurrentDay(days[currentIndex + 1]);
@@ -177,7 +161,7 @@ const Demo = () => {
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-center mb-6"
+          className="text-center mb-4"
         >
           <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/10 text-primary text-xs font-semibold mb-3">
             <Zap className="w-3.5 h-3.5" />
@@ -191,21 +175,8 @@ const Demo = () => {
           </p>
         </motion.div>
 
-        {/* User View Link */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.2 }}
-          className="flex justify-center mb-4"
-        >
-          <Link
-            to="/app"
-            className="inline-flex items-center gap-1.5 text-xs text-primary hover:text-primary/80 transition-colors"
-          >
-            See what James sees
-            <ExternalLink className="w-3 h-3" />
-          </Link>
-        </motion.div>
+        {/* View Toggle */}
+        <ViewToggle />
 
         {/* Persona Card */}
         <motion.div
@@ -265,7 +236,7 @@ const Demo = () => {
             >
               <div className="flex items-start gap-3">
                 <div className="p-2 rounded-lg bg-primary/10">
-                  {currentDay === "friday" ? (
+                  {currentDay === "sunday" ? (
                     <Scan className="w-5 h-5 text-primary" />
                   ) : (
                     <Sparkles className="w-5 h-5 text-primary" />
@@ -278,10 +249,10 @@ const Demo = () => {
               </div>
             </motion.div>
 
-            {/* Day-specific content - REDUCED interventions */}
+            {/* Day-specific content */}
             
-            {/* Friday - Domain explanation + Trust Settings + Scanning visualization */}
-            {currentDay === "friday" && (
+            {/* Sunday - Domain explanation + Trust Settings + Scanning visualization */}
+            {currentDay === "sunday" && (
               <>
                 <DomainCard />
                 <TrustSettings threshold={80} />
@@ -323,76 +294,33 @@ const Demo = () => {
                     </div>
                   </div>
                 </motion.div>
-              </>
-            )}
-
-            {/* Saturday - Supplement order with full reasoning */}
-            {currentDay === "saturday" && (
-              <AutonomousAction
-                type="order"
-                title="Vive Organic Immunity Boost Shots"
-                subtitle="Whole Foods via DoorDash"
-                timestamp="Ordered 9:15 AM"
-                status="confirmed"
-                undoHours={2}
-                onUndo={handleUndo}
-                showReasoning={true}
-                signals={[
-                  { label: "High-risk events", value: "3 in next 5 days" },
-                  { label: "Lead time needed", value: "72 hours for efficacy" },
-                  { label: "Critical deadline", value: "Thursday pitch" },
-                  { label: "Past pattern", value: "Sick after 2 of last 4 events" },
-                ]}
-                confidence={87}
-                threshold={80}
-                whyNow="Ordering now ensures 72-hour window for supplements to take effect before Tuesday networking event. Waiting longer reduces protection efficacy."
-              />
-            )}
-
-            {/* Sunday - Just monitoring, show silence */}
-            {currentDay === "sunday" && (
-              <>
-                <motion.div
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="ahead-card"
-                >
-                  <div className="flex items-center gap-3">
-                    <div className="p-2 rounded-lg bg-risk-low/10">
-                      <CheckCircle2 className="w-5 h-5 text-risk-low" />
-                    </div>
-                    <div>
-                      <h4 className="font-semibold text-foreground">Supplements delivered</h4>
-                      <p className="text-sm text-muted-foreground">Protection protocol on track</p>
-                    </div>
-                  </div>
-                </motion.div>
                 <SilenceLog moments={currentSilenceMoments} />
               </>
             )}
 
-            {/* Monday - Show silence, no intervention */}
+            {/* Monday - Supplement order with full reasoning */}
             {currentDay === "monday" && (
               <>
-                <motion.div
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="ahead-card"
-                >
-                  <div className="flex items-center gap-3">
-                    <div className="p-2 rounded-lg bg-muted">
-                      <Sparkles className="w-5 h-5 text-muted-foreground" />
-                    </div>
-                    <div>
-                      <h4 className="font-semibold text-foreground">WeWork Networking Event</h4>
-                      <p className="text-sm text-muted-foreground">6:30 PM · Downtown</p>
-                      <p className="text-xs text-muted-foreground mt-1">
-                        Protection already active — no additional intervention needed
-                      </p>
-                    </div>
-                  </div>
-                </motion.div>
-                <SilenceLog moments={currentSilenceMoments} defaultExpanded={true} />
+                <AutonomousAction
+                  type="order"
+                  title="Vive Organic Immunity Boost Shots"
+                  subtitle="Whole Foods via DoorDash"
+                  timestamp="Ordered 9:15 AM"
+                  status="confirmed"
+                  undoHours={2}
+                  onUndo={handleUndo}
+                  showReasoning={true}
+                  signals={[
+                    { label: "High-risk events", value: "3 in next 4 days" },
+                    { label: "Lead time needed", value: "72 hours for efficacy" },
+                    { label: "Critical deadline", value: "Thursday pitch" },
+                    { label: "Past pattern", value: "Sick after 2 of last 4 events" },
+                  ]}
+                  confidence={87}
+                  threshold={80}
+                  whyNow="Ordering now ensures 72-hour window for supplements to take effect before Wednesday networking event. Waiting longer reduces protection efficacy."
+                />
+                <SilenceLog moments={currentSilenceMoments} />
               </>
             )}
 
@@ -420,26 +348,45 @@ const Demo = () => {
               </>
             )}
 
-            {/* Wednesday - Single contextual nudge */}
+            {/* Wednesday - Monitoring + expanded silence log */}
             {currentDay === "wednesday" && (
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="ahead-card"
-              >
-                <div className="flex items-center gap-3">
-                  <div className="p-2 rounded-lg bg-accent/10">
-                    <Sparkles className="w-5 h-5 text-accent" />
+              <>
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="ahead-card"
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 rounded-lg bg-accent/10">
+                      <Sparkles className="w-5 h-5 text-accent" />
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-foreground">Founders Club Dinner</h4>
+                      <p className="text-sm text-muted-foreground">7:00 PM · The Battery</p>
+                      <p className="text-xs text-muted-foreground mt-1">
+                        Protection active — monitoring only
+                      </p>
+                    </div>
                   </div>
-                  <div>
-                    <h4 className="font-semibold text-foreground">Founders Club Dinner</h4>
-                    <p className="text-sm text-muted-foreground">7:00 PM · The Battery</p>
-                    <p className="text-xs text-primary mt-1">
-                      One contextual nudge delivered (see below)
-                    </p>
+                </motion.div>
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.1 }}
+                  className="ahead-card mt-4"
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 rounded-lg bg-risk-low/10">
+                      <CheckCircle2 className="w-5 h-5 text-risk-low" />
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-foreground">IV therapy completed</h4>
+                      <p className="text-sm text-muted-foreground">Immune boost active</p>
+                    </div>
                   </div>
-                </div>
-              </motion.div>
+                </motion.div>
+                <SilenceLog moments={currentSilenceMoments} defaultExpanded={true} />
+              </>
             )}
 
             {/* Thursday - Summary with AI comparison and stakes */}
@@ -450,18 +397,6 @@ const Demo = () => {
               </>
             )}
           </motion.div>
-        </AnimatePresence>
-
-        {/* Contextual Nudge Overlay - Only on Wednesday */}
-        <AnimatePresence>
-          {showNudge && (
-            <ContextNudge
-              message="Restroom on the right. Quick handwash before appetizers?"
-              location="The Battery · Founders Club Dinner"
-              onDismiss={() => setShowNudge(false)}
-              confidence={88}
-            />
-          )}
         </AnimatePresence>
 
         {/* Learning Feedback */}
