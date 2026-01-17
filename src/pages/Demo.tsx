@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
-  Sparkles, Shield, Zap, CheckCircle2, Scan
+  Sparkles, Shield, Zap, CheckCircle2, Scan, Coffee, RefreshCw
 } from "lucide-react";
 import { DemoTimeline } from "@/components/ahead/DemoTimeline";
 import { AutonomousAction } from "@/components/ahead/AutonomousAction";
@@ -15,7 +15,7 @@ import { AIComparison } from "@/components/ahead/AIComparison";
 import { StakesOutcome } from "@/components/ahead/StakesOutcome";
 import { ViewToggle } from "@/components/ahead/ViewToggle";
 
-export type DemoDay = "sunday" | "monday" | "tuesday" | "wednesday" | "thursday";
+export type DemoDay = "sunday" | "monday" | "tuesday" | "wednesday" | "thursday" | "friday" | "saturday" | "new-sunday";
 
 const demoData = {
   sunday: {
@@ -47,6 +47,24 @@ const demoData = {
     subtitle: "Pitch Day",
     headline: "Protection complete",
     description: "2 high-impact interventions. 4 moments AHEAD stayed silent. System calibration unchanged.",
+  },
+  friday: {
+    title: "Friday",
+    subtitle: "Day after pitch",
+    headline: "Mission accomplished",
+    description: "Pitch delivered successfully. Protection protocol deactivated. AHEAD is standing down.",
+  },
+  saturday: {
+    title: "Saturday",
+    subtitle: "Recovery day",
+    headline: "System idle",
+    description: "No high-risk events detected. AHEAD is on standby, letting you rest.",
+  },
+  "new-sunday": {
+    title: "Sunday",
+    subtitle: "New week begins",
+    headline: "New week scan initiated",
+    description: "Analyzing upcoming calendar for next week's priorities. The cycle begins again.",
   },
 };
 
@@ -90,6 +108,9 @@ const silenceMoments = {
       threshold: 80,
     },
   ],
+  friday: [],
+  saturday: [],
+  "new-sunday": [],
 };
 
 const Demo = () => {
@@ -97,7 +118,7 @@ const Demo = () => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [showLearning, setShowLearning] = useState(false);
 
-  const days: DemoDay[] = ["sunday", "monday", "tuesday", "wednesday", "thursday"];
+  const days: DemoDay[] = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "new-sunday"];
   const currentIndex = days.indexOf(currentDay);
   const dayData = demoData[currentDay];
 
@@ -195,7 +216,9 @@ const Demo = () => {
             </div>
             <div className="text-right">
               <p className="text-xs text-muted-foreground">Risk Level</p>
-              <p className="font-semibold text-risk-high">Elevated</p>
+              <p className={`font-semibold ${currentDay === "friday" || currentDay === "saturday" || currentDay === "new-sunday" ? "text-risk-low" : "text-risk-high"}`}>
+                {currentDay === "friday" || currentDay === "saturday" || currentDay === "new-sunday" ? "Low" : "Elevated"}
+              </p>
             </div>
           </div>
         </motion.div>
@@ -225,6 +248,18 @@ const Demo = () => {
                   Protected
                 </div>
               )}
+              {(currentDay === "friday" || currentDay === "saturday") && (
+                <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-muted text-muted-foreground text-xs font-semibold">
+                  <Coffee className="w-3.5 h-3.5" />
+                  Idle
+                </div>
+              )}
+              {currentDay === "new-sunday" && (
+                <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-primary/10 text-primary text-xs font-semibold">
+                  <RefreshCw className="w-3.5 h-3.5" />
+                  Scanning
+                </div>
+              )}
             </div>
 
             {/* AHEAD's Insight */}
@@ -236,8 +271,10 @@ const Demo = () => {
             >
               <div className="flex items-start gap-3">
                 <div className="p-2 rounded-lg bg-primary/10">
-                  {currentDay === "sunday" ? (
+                  {currentDay === "sunday" || currentDay === "new-sunday" ? (
                     <Scan className="w-5 h-5 text-primary" />
+                  ) : currentDay === "friday" || currentDay === "saturday" ? (
+                    <Coffee className="w-5 h-5 text-muted-foreground" />
                   ) : (
                     <Sparkles className="w-5 h-5 text-primary" />
                   )}
@@ -394,6 +431,166 @@ const Demo = () => {
               <>
                 <AIComparison />
                 <StakesOutcome />
+              </>
+            )}
+
+            {/* Friday - Mission Complete */}
+            {currentDay === "friday" && (
+              <>
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="ahead-card bg-gradient-to-br from-risk-low/10 via-card to-card"
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="p-3 rounded-xl bg-risk-low/20">
+                      <CheckCircle2 className="w-6 h-6 text-risk-low" />
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-foreground">Pitch delivered successfully</h4>
+                      <p className="text-sm text-muted-foreground">James stayed healthy through the week</p>
+                    </div>
+                  </div>
+                </motion.div>
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.1 }}
+                  className="ahead-card mt-4"
+                >
+                  <div className="space-y-3">
+                    <h4 className="font-semibold text-foreground text-sm">Week Summary</h4>
+                    <div className="flex items-center justify-between text-sm">
+                      <span className="text-muted-foreground">Actions taken</span>
+                      <span className="font-semibold text-foreground">2</span>
+                    </div>
+                    <div className="flex items-center justify-between text-sm">
+                      <span className="text-muted-foreground">Moments stayed silent</span>
+                      <span className="font-semibold text-foreground">4</span>
+                    </div>
+                    <div className="flex items-center justify-between text-sm">
+                      <span className="text-muted-foreground">Threshold adjustments</span>
+                      <span className="font-semibold text-foreground">0</span>
+                    </div>
+                    <div className="pt-3 border-t border-border/50 text-xs text-muted-foreground">
+                      AHEAD will remain idle until new high-risk patterns are detected.
+                    </div>
+                  </div>
+                </motion.div>
+              </>
+            )}
+
+            {/* Saturday - System Idle */}
+            {currentDay === "saturday" && (
+              <>
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="ahead-card"
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 rounded-lg bg-muted">
+                      <Coffee className="w-5 h-5 text-muted-foreground" />
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-foreground">No interventions needed</h4>
+                      <p className="text-sm text-muted-foreground">AHEAD is on standby</p>
+                    </div>
+                  </div>
+                </motion.div>
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.1 }}
+                  className="ahead-card mt-4"
+                >
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between text-sm">
+                      <span className="text-muted-foreground">Calendar events today</span>
+                      <span className="font-semibold text-foreground">1</span>
+                    </div>
+                    <div className="flex items-center justify-between text-sm">
+                      <span className="text-muted-foreground">Risk level</span>
+                      <span className="font-semibold text-risk-low">Low</span>
+                    </div>
+                    <div className="flex items-center justify-between text-sm">
+                      <span className="text-muted-foreground">Interventions considered</span>
+                      <span className="font-semibold text-foreground">0</span>
+                    </div>
+                  </div>
+                </motion.div>
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.2 }}
+                  className="mt-4 p-4 rounded-xl bg-muted/30 border border-border/30 text-center"
+                >
+                  <p className="text-sm text-muted-foreground">
+                    Recovery day. AHEAD isn't constantly hovering — it knows when to step back.
+                  </p>
+                </motion.div>
+              </>
+            )}
+
+            {/* New Sunday - Cycle Restart */}
+            {currentDay === "new-sunday" && (
+              <>
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="ahead-card"
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 rounded-lg bg-primary/10">
+                      <RefreshCw className="w-5 h-5 text-primary" />
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-foreground">Weekly scan started</h4>
+                      <p className="text-sm text-muted-foreground">Analyzing next week's calendar</p>
+                    </div>
+                  </div>
+                </motion.div>
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.1 }}
+                  className="ahead-card mt-4"
+                >
+                  <div className="space-y-3">
+                    <h4 className="font-semibold text-foreground text-sm">Next Week Preview</h4>
+                    <div className="flex items-center justify-between text-sm">
+                      <span className="text-muted-foreground">Calendar events detected</span>
+                      <span className="font-semibold text-foreground">5</span>
+                    </div>
+                    <div className="flex items-center justify-between text-sm">
+                      <span className="text-muted-foreground">Client meetings</span>
+                      <span className="font-semibold text-foreground">2</span>
+                    </div>
+                    <div className="flex items-center justify-between text-sm">
+                      <span className="text-muted-foreground">Team offsite</span>
+                      <span className="font-semibold text-foreground">1</span>
+                    </div>
+                    <div className="pt-3 border-t border-border/50">
+                      <div className="flex items-center justify-between text-sm">
+                        <span className="text-muted-foreground">Risk assessment</span>
+                        <span className="font-semibold text-risk-low">Moderate</span>
+                      </div>
+                      <p className="text-xs text-muted-foreground mt-2">
+                        Lower stakes than last week. AHEAD may stay silent unless patterns change.
+                      </p>
+                    </div>
+                  </div>
+                </motion.div>
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.2 }}
+                  className="mt-4 p-4 rounded-xl bg-primary/5 border border-primary/20 text-center"
+                >
+                  <p className="text-sm text-muted-foreground">
+                    The cycle begins again. AHEAD is ready when you need it.
+                  </p>
+                </motion.div>
               </>
             )}
           </motion.div>
