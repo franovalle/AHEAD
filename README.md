@@ -1,18 +1,32 @@
 # AHEAD
 
-**Autonomous Health & Event-Aware Decision-making**
+**Anticipatory Health Early-intervention Advisory Delegate**
 
-An AI system that acts only when confident — and stays silent when not.
+An AI delegate that anticipates health risks and intervenes early — acting only when confident, staying silent when not.
 
-## Overview
+---
 
-AHEAD is a proactive AI assistant designed for high-stakes health protection. It analyzes your calendar, detects risk patterns, and takes preventive action when confidence thresholds are met. When uncertain, it stays silent.
+## The Problem
+
+Did you know most common cold and flu viruses incubate for about three days before you even start to feel sick? By the time you notice a sore throat or body aches, you were actually infected days earlier—often with no warning at all.
+
+What if that crucial day—the one where you pitch your biggest idea, meet investors, or have a once-in-a-lifetime opportunity—lands right as those symptoms hit? Suddenly, you're not at your best, simply because illness caught you off guard.
+
+## The Solution
+
+AHEAD fixes this by looking forward, not backward. Integrated with your calendar, it scans your schedule every week and creates a personalized, proactive game plan.
+
+When it spots risky moments—crowded events, travel, or just a packed week—it seamlessly orders vitamins, schedules in-home immune-boosting IV therapy, and prompts you with timely hygiene tips.
+
+No more waking up voiceless or run down on the big day—because you, and your health, were one step AHEAD.
+
+---
 
 ## Key Concepts
 
 - **Confidence Thresholds**: AHEAD only acts when its confidence exceeds user-defined thresholds (default: 80%)
 - **Silence Logging**: When AHEAD considers but doesn't take action, it logs these moments for transparency
-- **Domain-Specific Trust**: Different action types (orders, bookings, health interventions) can have different confidence requirements
+- **Domain-Specific Trust**: Different action types can have different confidence requirements
 - **Learning from Feedback**: User feedback adjusts future decision-making
 
 ## Demo Scenario
@@ -28,40 +42,17 @@ The demo follows James Kelly, a founder with a critical Series A pitch on Thursd
 
 ## Tech Stack
 
-- **React 18** with TypeScript
-- **Tailwind CSS** for styling
-- **Framer Motion** for animations
-- **shadcn/ui** components
-- **Vite** for development and building
+- React 18 with TypeScript
+- Tailwind CSS for styling
+- Framer Motion for animations
+- shadcn/ui components
+- Vite for development
 
 ## Getting Started
 
 ```bash
-# Install dependencies
 npm install
-
-# Start development server
 npm run dev
-
-# Build for production
-npm run build
-```
-
-## Project Structure
-
-```
-src/
-├── components/ahead/    # AHEAD-specific components
-│   ├── AutonomousAction.tsx
-│   ├── IVBookingCard.tsx
-│   ├── SilenceLog.tsx
-│   ├── DemoControls.tsx
-│   └── ...
-├── pages/
-│   ├── Demo.tsx        # Main demo walkthrough
-│   ├── UserView.tsx    # User's activity log view
-│   └── Dashboard.tsx   # Dashboard view
-└── ...
 ```
 
 ## License
