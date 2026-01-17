@@ -81,7 +81,7 @@ export const IVBookingCard = ({
           {/* In-home badge */}
           <div className="flex items-center gap-1.5 mt-3 text-xs text-accent font-medium">
             <MapPin className="w-3.5 h-3.5" />
-            <span>In-home service · No travel needed</span>
+            <span>In-home service</span>
           </div>
 
           {/* Compact Confidence Bar - Always visible */}

@@ -293,6 +293,7 @@ const Demo = () => {
               <>
                 <DomainCard />
                 <TrustSettings threshold={80} />
+                {/* Calendar Events List */}
                 <motion.div
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -300,17 +301,36 @@ const Demo = () => {
                   className="ahead-card mt-4"
                 >
                   <div className="space-y-3">
-                    <div className="flex items-center justify-between text-sm">
-                      <span className="text-muted-foreground">Calendar events detected</span>
-                      <span className="font-semibold text-foreground">7</span>
-                    </div>
-                    <div className="flex items-center justify-between text-sm">
-                      <span className="text-muted-foreground">High-risk exposure events</span>
-                      <span className="font-semibold text-risk-high">3</span>
-                    </div>
-                    <div className="flex items-center justify-between text-sm">
-                      <span className="text-muted-foreground">Critical deadline</span>
-                      <span className="font-semibold text-foreground">Thursday pitch</span>
+                    <h4 className="text-sm font-semibold text-foreground">7 Calendar Events Detected</h4>
+                    <div className="space-y-2 text-xs">
+                      <div className="flex items-center justify-between">
+                        <span className="text-muted-foreground">Monday · Team standup</span>
+                        <span className="text-risk-low font-medium">Low risk</span>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span className="text-muted-foreground">Tuesday · Investor coffee</span>
+                        <span className="text-risk-medium font-medium">Medium risk</span>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span className="text-muted-foreground">Tuesday · Networking happy hour</span>
+                        <span className="text-risk-high font-medium">High risk</span>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span className="text-muted-foreground">Wednesday · Client lunch</span>
+                        <span className="text-risk-medium font-medium">Medium risk</span>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span className="text-muted-foreground">Wednesday · Founders Club dinner</span>
+                        <span className="text-risk-high font-medium">High risk</span>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span className="text-muted-foreground">Thursday · Series A pitch</span>
+                        <span className="text-primary font-semibold">Critical</span>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span className="text-muted-foreground">Thursday · Celebration dinner</span>
+                        <span className="text-risk-high font-medium">High risk</span>
+                      </div>
                     </div>
                     <div className="pt-3 border-t border-border/50">
                       <div className="flex items-center justify-between text-sm">
@@ -365,9 +385,9 @@ const Demo = () => {
             {currentDay === "tuesday" && (
               <>
                 <IVBookingCard
-                  provider="Restore Hyper Wellness"
+                  provider="The IV Pros"
                   treatment="Immune Boost IV Drip"
-                  scheduledTime="Tomorrow, 8:30 PM"
+                  scheduledTime="Tomorrow, 7:00 PM"
                   duration="45 min"
                   status="confirmed"
                   showReasoning={true}
@@ -418,7 +438,7 @@ const Demo = () => {
                     </div>
                     <div>
                       <h4 className="font-semibold text-foreground">IV therapy completed</h4>
-                      <p className="text-sm text-muted-foreground">Immune boost active</p>
+                      <p className="text-sm text-muted-foreground">Finished at 7:45 PM · Immune boost active</p>
                     </div>
                   </div>
                 </motion.div>
