@@ -9,6 +9,8 @@ interface DemoControlsProps {
   onNext: () => void;
   canGoPrev: boolean;
   canGoNext: boolean;
+  currentIndex: number;
+  totalDays: number;
 }
 
 export const DemoControls = ({
@@ -18,6 +20,8 @@ export const DemoControls = ({
   onNext,
   canGoPrev,
   canGoNext,
+  currentIndex,
+  totalDays,
 }: DemoControlsProps) => {
   return (
     <motion.div
@@ -26,7 +30,25 @@ export const DemoControls = ({
       transition={{ delay: 0.3 }}
       className="fixed bottom-6 left-4 right-4 max-w-lg mx-auto"
     >
-      <div className="bg-card/80 backdrop-blur-lg border border-border rounded-2xl p-3 shadow-elevated">
+      <div className="bg-card/90 backdrop-blur-lg border border-border rounded-2xl p-3 shadow-elevated">
+        {/* Progress bar */}
+        <div className="mb-3 px-2">
+          <div className="h-1 bg-muted rounded-full overflow-hidden">
+            <motion.div
+              className="h-full bg-primary rounded-full"
+              initial={{ width: 0 }}
+              animate={{ width: `${((currentIndex + 1) / totalDays) * 100}%` }}
+              transition={{ duration: 0.3 }}
+            />
+          </div>
+          <div className="flex justify-between mt-1">
+            <span className="text-[10px] text-muted-foreground">Day {currentIndex + 1} of {totalDays}</span>
+            <span className="text-[10px] text-muted-foreground">
+              {isPlaying ? "Auto-advancing" : "Use ← → arrows"}
+            </span>
+          </div>
+        </div>
+
         <div className="flex items-center justify-center gap-2">
           {/* Previous */}
           <Button
@@ -42,7 +64,8 @@ export const DemoControls = ({
           {/* Play/Pause */}
           <Button
             onClick={onPlayPause}
-            className="rounded-xl h-12 px-6 bg-primary hover:bg-primary/90 text-primary-foreground font-medium gap-2"
+            variant={isPlaying ? "secondary" : "default"}
+            className="rounded-xl h-10 px-5 font-medium gap-2"
           >
             {isPlaying ? (
               <>
@@ -52,7 +75,7 @@ export const DemoControls = ({
             ) : (
               <>
                 <Play className="w-4 h-4" />
-                Play Demo
+                Play
               </>
             )}
           </Button>

@@ -1,6 +1,13 @@
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { ShoppingBag, Calendar, Bell, Clock, Undo2, CheckCircle2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { DecisionReasoning } from "./DecisionReasoning";
+
+interface Signal {
+  label: string;
+  value: string;
+}
 
 interface AutonomousActionProps {
   type: "order" | "booking" | "reminder" | "event";
@@ -10,6 +17,12 @@ interface AutonomousActionProps {
   status: "confirmed" | "completed" | "upcoming" | "pending";
   undoHours?: number;
   onUndo?: () => void;
+  // New props for reasoning
+  showReasoning?: boolean;
+  signals?: Signal[];
+  confidence?: number;
+  threshold?: number;
+  whyNow?: string;
 }
 
 const typeConfig = {
@@ -50,6 +63,11 @@ export const AutonomousAction = ({
   status,
   undoHours,
   onUndo,
+  showReasoning = false,
+  signals = [],
+  confidence = 0,
+  threshold = 80,
+  whyNow = "",
 }: AutonomousActionProps) => {
   const typeStyles = typeConfig[type];
   const statusStyles = statusConfig[status];
@@ -102,6 +120,16 @@ export const AutonomousAction = ({
               </Button>
             )}
           </div>
+
+          {/* Decision Reasoning */}
+          {showReasoning && signals.length > 0 && (
+            <DecisionReasoning
+              signals={signals}
+              confidence={confidence}
+              threshold={threshold}
+              whyNow={whyNow}
+            />
+          )}
         </div>
       </div>
     </motion.div>
