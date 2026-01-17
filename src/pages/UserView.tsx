@@ -1,13 +1,12 @@
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { 
   Settings, Shield, ChevronRight, ShoppingBag, 
-  Syringe, Check
+  Syringe, Check, Undo2, Dumbbell
 } from "lucide-react";
 import { useState } from "react";
 import { ViewToggle } from "@/components/ahead/ViewToggle";
-import { PendingSuggestion } from "@/components/ahead/PendingSuggestion";
 
-const activityLog = [
+const initialActivityLog = [
   {
     id: 1,
     type: "order" as const,
@@ -24,15 +23,35 @@ const activityLog = [
     status: "Confirmed",
     reason: "Scheduled 36 hours before your pitch — optimal timing for hydration and immune support.",
   },
+  {
+    id: 3,
+    type: "recovery" as const,
+    title: "Recovery session",
+    time: "Saturday, 10:00 AM",
+    status: "Booked",
+    reason: "Post-pitch recovery at Restore Hyper Wellness. Your calendar was clear Saturday morning.",
+  },
 ];
 
 const typeConfig = {
   order: { icon: ShoppingBag, color: "text-primary", bg: "bg-primary/10" },
   booking: { icon: Syringe, color: "text-accent", bg: "bg-accent/10" },
+  recovery: { icon: Dumbbell, color: "text-primary", bg: "bg-primary/10" },
 };
 
 const UserView = () => {
   const [selectedActivity, setSelectedActivity] = useState<number | null>(null);
+  const [activityLog, setActivityLog] = useState(initialActivityLog);
+  const [undoneItems, setUndoneItems] = useState<typeof initialActivityLog>([]);
+
+  const handleUndo = (activityId: number) => {
+    const item = activityLog.find(a => a.id === activityId);
+    if (item) {
+      setUndoneItems(prev => [...prev, item]);
+      setActivityLog(prev => prev.filter(a => a.id !== activityId));
+      setSelectedActivity(null);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -78,7 +97,7 @@ const UserView = () => {
             </div>
             <div className="flex-1">
               <h3 className="font-semibold text-foreground">Ready for your pitch</h3>
-              <p className="text-sm text-muted-foreground">AHEAD handled 2 things this week</p>
+              <p className="text-sm text-muted-foreground">AHEAD handled {activityLog.length} things this week</p>
             </div>
             <div className="p-2 rounded-full bg-risk-low/10">
               <Check className="w-5 h-5 text-risk-low" />
@@ -95,75 +114,97 @@ const UserView = () => {
           <h3 className="text-sm font-semibold text-foreground mb-3">This Week</h3>
           
           <div className="space-y-2">
-            {activityLog.map((activity, index) => {
-              const config = typeConfig[activity.type];
-              const Icon = config.icon;
-              const isSelected = selectedActivity === activity.id;
+            <AnimatePresence mode="popLayout">
+              {activityLog.map((activity, index) => {
+                const config = typeConfig[activity.type];
+                const Icon = config.icon;
+                const isSelected = selectedActivity === activity.id;
 
-              return (
-                <motion.div
-                  key={activity.id}
-                  initial={{ opacity: 0, x: -10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.3 + index * 0.1 }}
-                >
-                  <button
-                    onClick={() => setSelectedActivity(isSelected ? null : activity.id)}
-                    className="w-full ahead-card hover:border-primary/30 transition-colors"
+                return (
+                  <motion.div
+                    key={activity.id}
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: 10, height: 0 }}
+                    transition={{ delay: 0.3 + index * 0.1 }}
+                    layout
                   >
-                    <div className="flex items-center gap-3">
-                      <div className={`p-2 rounded-lg ${config.bg}`}>
-                        <Icon className={`w-4 h-4 ${config.color}`} />
+                    <button
+                      onClick={() => setSelectedActivity(isSelected ? null : activity.id)}
+                      className="w-full ahead-card hover:border-primary/30 transition-colors"
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className={`p-2 rounded-lg ${config.bg}`}>
+                          <Icon className={`w-4 h-4 ${config.color}`} />
+                        </div>
+                        <div className="flex-1 text-left">
+                          <p className="text-sm font-medium text-foreground">{activity.title}</p>
+                          <p className="text-xs text-muted-foreground">{activity.time}</p>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <span className="flex items-center gap-1 text-xs text-risk-low">
+                            <Check className="w-3 h-3" />
+                            {activity.status}
+                          </span>
+                          <motion.div
+                            animate={{ rotate: isSelected ? 90 : 0 }}
+                            transition={{ duration: 0.2 }}
+                          >
+                            <ChevronRight className="w-4 h-4 text-muted-foreground" />
+                          </motion.div>
+                        </div>
                       </div>
-                      <div className="flex-1 text-left">
-                        <p className="text-sm font-medium text-foreground">{activity.title}</p>
-                        <p className="text-xs text-muted-foreground">{activity.time}</p>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <span className="flex items-center gap-1 text-xs text-risk-low">
-                          <Check className="w-3 h-3" />
-                          {activity.status}
-                        </span>
-                        <motion.div
-                          animate={{ rotate: isSelected ? 90 : 0 }}
-                          transition={{ duration: 0.2 }}
-                        >
-                          <ChevronRight className="w-4 h-4 text-muted-foreground" />
-                        </motion.div>
-                      </div>
-                    </div>
 
-                    {/* Expanded reasoning - Human readable */}
-                    {isSelected && (
-                      <motion.div
-                        initial={{ opacity: 0, height: 0 }}
-                        animate={{ opacity: 1, height: "auto" }}
-                        className="mt-3 pt-3 border-t border-border/50"
-                      >
-                        <p className="text-sm text-muted-foreground text-left">
-                          {activity.reason}
-                        </p>
-                      </motion.div>
-                    )}
-                  </button>
-                </motion.div>
-              );
-            })}
+                      {/* Expanded reasoning + Undo */}
+                      <AnimatePresence>
+                        {isSelected && (
+                          <motion.div
+                            initial={{ opacity: 0, height: 0 }}
+                            animate={{ opacity: 1, height: "auto" }}
+                            exit={{ opacity: 0, height: 0 }}
+                            className="mt-3 pt-3 border-t border-border/50"
+                          >
+                            <p className="text-sm text-muted-foreground text-left mb-3">
+                              {activity.reason}
+                            </p>
+                            <div 
+                              className="flex justify-end"
+                              onClick={(e) => e.stopPropagation()}
+                            >
+                              <button
+                                onClick={() => handleUndo(activity.id)}
+                                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-muted-foreground hover:bg-muted hover:text-foreground transition-colors"
+                              >
+                                <Undo2 className="w-3 h-3" />
+                                Undo this action
+                              </button>
+                            </div>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </button>
+                  </motion.div>
+                );
+              })}
+            </AnimatePresence>
           </div>
         </motion.div>
 
-        {/* Pending Suggestion */}
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.5 }}
-          className="mt-6"
-        >
-          <PendingSuggestion
-            title="Book a recovery session?"
-            description="Saturday morning at Restore Hyper Wellness. Help your body bounce back after the pitch week."
-          />
-        </motion.div>
+        {/* Undone items notice */}
+        <AnimatePresence>
+          {undoneItems.length > 0 && (
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              className="mt-4 p-3 rounded-xl bg-muted/50 border border-border/50"
+            >
+              <p className="text-xs text-muted-foreground text-center">
+                {undoneItems.length} action{undoneItems.length > 1 ? 's' : ''} undone. AHEAD will learn from this.
+              </p>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         {/* Footer */}
         <motion.footer
