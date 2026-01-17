@@ -20,9 +20,9 @@ const initialActivityLog = [
     type: "booking" as const,
     title: "Mobile IV Therapy",
     subtitle: "Immune Boost · In-home service",
-    time: "Wednesday, 7:00 PM",
+    time: "Wednesday, 7:45 PM",
     status: "Completed",
-    reason: "AHEAD booked a mobile IV therapist to come to your home Wednesday evening. High-dose vitamin C and zinc infusion for peak immunity on pitch day. No travel, no waiting room.",
+    reason: "Mobile IV therapist came to your home Wednesday at 7 PM. High-dose vitamin C and zinc infusion — peak immunity for your Thursday pitch.",
   },
 ];
 
