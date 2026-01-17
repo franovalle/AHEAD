@@ -69,7 +69,7 @@ export const InterventionCard = ({
       animate={{ opacity: 1, y: 0, scale: 1 }}
       exit={{ opacity: 0, y: -20, scale: 0.95 }}
       transition={{ duration: 0.4, ease: "easeOut" }}
-      className="aurora-card-interactive overflow-hidden"
+      className="ahead-card-interactive overflow-hidden"
     >
       {/* Gradient accent */}
       <div className={`absolute inset-0 bg-gradient-to-br ${config.gradient} pointer-events-none`} />
