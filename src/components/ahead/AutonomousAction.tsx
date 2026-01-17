@@ -1,8 +1,8 @@
-import { useState } from "react";
 import { motion } from "framer-motion";
 import { ShoppingBag, Calendar, Bell, Clock, Undo2, CheckCircle2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { DecisionReasoning } from "./DecisionReasoning";
+import { CompactConfidence } from "./CompactConfidence";
 
 interface Signal {
   label: string;
@@ -121,7 +121,12 @@ export const AutonomousAction = ({
             )}
           </div>
 
-          {/* Decision Reasoning */}
+          {/* Compact Confidence Bar - Always visible */}
+          {showReasoning && signals.length > 0 && (
+            <CompactConfidence confidence={confidence} threshold={threshold} />
+          )}
+
+          {/* Full Decision Reasoning - Expandable */}
           {showReasoning && signals.length > 0 && (
             <DecisionReasoning
               signals={signals}
