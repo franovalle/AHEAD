@@ -1,11 +1,10 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { 
   Settings, Shield, ChevronRight, ShoppingBag, 
-  Syringe, Check, Undo2, Hand, Sparkles, Loader2
+  Syringe, Check, Undo2
 } from "lucide-react";
 import { useState } from "react";
 import { ViewToggle } from "@/components/ahead/ViewToggle";
-import { supabase } from "@/integrations/supabase/client";
 
 const initialActivityLog = [
   {
@@ -18,42 +17,23 @@ const initialActivityLog = [
   },
   {
     id: 2,
-    type: "nudge" as const,
-    title: "Hand washing reminder",
-    time: "Monday, 7:45 PM",
-    status: "Sent",
-    reason: "At the networking dinner, AHEAD noticed appetizers were being served. Sent a gentle reminder: 'Bathroom is on your right - quick wash before the food?'",
-  },
-  {
-    id: 3,
     type: "booking" as const,
-    title: "IV therapy session",
-    time: "Tuesday, 3:45 PM",
-    status: "Confirmed",
-    reason: "Hydration plus vitamins prevent the fatigue that makes you vulnerable to colds. Scheduled 36 hours before your pitch.",
-  },
-  {
-    id: 4,
-    type: "booking" as const,
-    title: "Immunity IV drip",
-    time: "Saturday, 10:00 AM",
-    status: "Booked",
-    reason: "After high-stress events, your immune system dips for 24-48 hours. This prevents the post-pitch crash that often leads to colds.",
+    title: "Immune Boost IV",
+    time: "Wednesday, 8:30 PM",
+    status: "Completed",
+    reason: "IV therapy delivered 12 hours before pitch. High-dose vitamin C and zinc provide peak immune support for Thursday.",
   },
 ];
 
 const typeConfig = {
   order: { icon: ShoppingBag, color: "text-primary", bg: "bg-primary/10" },
   booking: { icon: Syringe, color: "text-accent", bg: "bg-accent/10" },
-  nudge: { icon: Hand, color: "text-blue-500", bg: "bg-blue-500/10" },
 };
 
 const UserView = () => {
   const [selectedActivity, setSelectedActivity] = useState<number | null>(null);
   const [activityLog, setActivityLog] = useState(initialActivityLog);
   const [undoneItems, setUndoneItems] = useState<typeof initialActivityLog>([]);
-  const [aiReasonings, setAiReasonings] = useState<Record<number, string>>({});
-  const [loadingReasoning, setLoadingReasoning] = useState<number | null>(null);
 
   const handleUndo = (activityId: number) => {
     const item = activityLog.find(a => a.id === activityId);
@@ -61,32 +41,6 @@ const UserView = () => {
       setUndoneItems(prev => [...prev, item]);
       setActivityLog(prev => prev.filter(a => a.id !== activityId));
       setSelectedActivity(null);
-    }
-  };
-
-  const generateAIReasoning = async (activity: typeof initialActivityLog[0]) => {
-    if (aiReasonings[activity.id]) return; // Already generated
-    
-    setLoadingReasoning(activity.id);
-    try {
-      const { data, error } = await supabase.functions.invoke('generate-reasoning', {
-        body: {
-          actionType: activity.type,
-          actionTitle: activity.title,
-          userContext: "James, preparing for a high-stakes pitch on Thursday during flu season",
-        },
-      });
-
-      if (error) throw error;
-      
-      setAiReasonings(prev => ({
-        ...prev,
-        [activity.id]: data.reasoning,
-      }));
-    } catch (error) {
-      console.error('Failed to generate AI reasoning:', error);
-    } finally {
-      setLoadingReasoning(null);
     }
   };
 
@@ -132,7 +86,7 @@ const UserView = () => {
               <Shield className="w-6 h-6 text-risk-low" />
             </div>
             <div className="flex-1">
-              <h3 className="font-semibold text-foreground">AHEAD handled {activityLog.length} things</h3>
+              <h3 className="font-semibold text-foreground">AHEAD handled 2 things</h3>
               <p className="text-sm text-muted-foreground">to keep you healthy this week</p>
             </div>
             <div className="p-2 rounded-full bg-risk-low/10">
@@ -155,8 +109,6 @@ const UserView = () => {
                 const config = typeConfig[activity.type];
                 const Icon = config.icon;
                 const isSelected = selectedActivity === activity.id;
-                const aiReasoning = aiReasonings[activity.id];
-                const isLoadingThis = loadingReasoning === activity.id;
 
                 return (
                   <motion.div
@@ -203,33 +155,13 @@ const UserView = () => {
                             className="mt-3 pt-3 border-t border-border/50"
                           >
                             <p className="text-sm text-muted-foreground text-left mb-3">
-                              {aiReasoning || activity.reason}
+                              {activity.reason}
                             </p>
                             
                             <div 
-                              className="flex justify-between items-center"
+                              className="flex justify-end items-center"
                               onClick={(e) => e.stopPropagation()}
                             >
-                              {!aiReasoning && (
-                                <button
-                                  onClick={() => generateAIReasoning(activity)}
-                                  disabled={isLoadingThis}
-                                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-primary hover:bg-primary/10 transition-colors disabled:opacity-50"
-                                >
-                                  {isLoadingThis ? (
-                                    <Loader2 className="w-3 h-3 animate-spin" />
-                                  ) : (
-                                    <Sparkles className="w-3 h-3" />
-                                  )}
-                                  {isLoadingThis ? "Generating..." : "Ask AI why"}
-                                </button>
-                              )}
-                              {aiReasoning && (
-                                <span className="flex items-center gap-1 text-xs text-primary/60">
-                                  <Sparkles className="w-3 h-3" />
-                                  AI generated
-                                </span>
-                              )}
                               <button
                                 onClick={() => handleUndo(activity.id)}
                                 className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-muted-foreground hover:bg-muted hover:text-foreground transition-colors"
