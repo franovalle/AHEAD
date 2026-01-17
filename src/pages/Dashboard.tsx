@@ -1,12 +1,12 @@
 import { motion } from "framer-motion";
 import { useState } from "react";
 import { Package, Syringe, ShieldCheck, Sparkles, HandMetal } from "lucide-react";
-import { Header } from "@/components/aurora/Header";
-import { RiskGauge } from "@/components/aurora/RiskGauge";
-import { InterventionCard } from "@/components/aurora/InterventionCard";
-import { UpcomingEventCard } from "@/components/aurora/UpcomingEventCard";
-import { QuickAction } from "@/components/aurora/QuickAction";
-import { SettingsPanel } from "@/components/aurora/SettingsPanel";
+import { Header } from "@/components/ahead/Header";
+import { RiskGauge } from "@/components/ahead/RiskGauge";
+import { InterventionCard } from "@/components/ahead/InterventionCard";
+import { UpcomingEventCard } from "@/components/ahead/UpcomingEventCard";
+import { QuickAction } from "@/components/ahead/QuickAction";
+import { SettingsPanel } from "@/components/ahead/SettingsPanel";
 import { toast } from "sonner";
 
 const Dashboard = () => {
@@ -113,7 +113,7 @@ const Dashboard = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="aurora-card mt-4"
+          className="ahead-card mt-4"
         >
           <div className="flex items-center justify-between mb-6">
             <div>
@@ -216,7 +216,7 @@ const Dashboard = () => {
           className="mt-10 text-center"
         >
           <p className="text-xs text-muted-foreground">
-            Aurora monitors your schedule to help you stay healthy.
+            AHEAD monitors your schedule to help you stay healthy.
           </p>
           <p className="text-xs text-muted-foreground mt-1">
             Your data stays private and secure.

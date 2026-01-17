@@ -4,7 +4,7 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap');
 
-/* Aurora Health Assistant - Calm, Wellness-Focused Design System */
+/* AHEAD - Proactive Health Protection Design System */
 
 @layer base {
   :root {
@@ -47,7 +47,7 @@
 
     --radius: 1rem;
 
-    /* Custom Aurora tokens */
+    /* Custom AHEAD tokens */
     --risk-low: 158 50% 45%;
     --risk-medium: 45 85% 55%;
     --risk-high: 15 70% 55%;
@@ -132,49 +132,49 @@
 }
 
 @layer components {
-  .aurora-card {
+  .ahead-card {
     @apply rounded-2xl border border-border/50 bg-card p-6;
     background: var(--gradient-card);
     box-shadow: var(--shadow-card);
   }
 
-  .aurora-card-interactive {
-    @apply aurora-card transition-all duration-300 ease-out;
+  .ahead-card-interactive {
+    @apply ahead-card transition-all duration-300 ease-out;
   }
 
-  .aurora-card-interactive:hover {
+  .ahead-card-interactive:hover {
     box-shadow: var(--shadow-elevated);
     transform: translateY(-2px);
   }
 
-  .aurora-gradient-text {
+  .ahead-gradient-text {
     background: var(--gradient-hero);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
 
-  .aurora-glow {
+  .ahead-glow {
     box-shadow: var(--shadow-glow);
   }
 
-  .aurora-risk-indicator {
+  .ahead-risk-indicator {
     @apply w-3 h-3 rounded-full animate-pulse;
   }
 
-  .aurora-risk-low {
+  .ahead-risk-low {
     background-color: hsl(var(--risk-low));
   }
 
-  .aurora-risk-medium {
+  .ahead-risk-medium {
     background-color: hsl(var(--risk-medium));
   }
 
-  .aurora-risk-high {
+  .ahead-risk-high {
     background-color: hsl(var(--risk-high));
   }
 
-  .aurora-risk-critical {
+  .ahead-risk-critical {
     background-color: hsl(var(--risk-critical));
   }
 }
