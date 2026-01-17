@@ -1,8 +1,9 @@
 import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
-  Sparkles, Shield, Zap, CheckCircle2, Scan
+  Sparkles, Shield, Zap, CheckCircle2, Scan, ExternalLink
 } from "lucide-react";
+import { Link } from "react-router-dom";
 import { DemoTimeline } from "@/components/ahead/DemoTimeline";
 import { AutonomousAction } from "@/components/ahead/AutonomousAction";
 import { ContextNudge } from "@/components/ahead/ContextNudge";
@@ -10,6 +11,10 @@ import { IVBookingCard } from "@/components/ahead/IVBookingCard";
 import { DemoControls } from "@/components/ahead/DemoControls";
 import { SilenceLog } from "@/components/ahead/SilenceLog";
 import { LearningFeedback } from "@/components/ahead/LearningFeedback";
+import { DomainCard } from "@/components/ahead/DomainCard";
+import { TrustSettings } from "@/components/ahead/TrustSettings";
+import { AIComparison } from "@/components/ahead/AIComparison";
+import { StakesOutcome } from "@/components/ahead/StakesOutcome";
 
 export type DemoDay = "friday" | "saturday" | "sunday" | "monday" | "tuesday" | "wednesday" | "thursday";
 
@@ -182,8 +187,24 @@ const Demo = () => {
             <span className="ahead-gradient-text">AHEAD</span>
           </h1>
           <p className="text-sm text-muted-foreground mt-1">
-            Proactive health protection with visible reasoning
+            Acts only when confident. Stays silent when not.
           </p>
+        </motion.div>
+
+        {/* User View Link */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.2 }}
+          className="flex justify-center mb-4"
+        >
+          <Link
+            to="/app"
+            className="inline-flex items-center gap-1.5 text-xs text-primary hover:text-primary/80 transition-colors"
+          >
+            See what James sees
+            <ExternalLink className="w-3 h-3" />
+          </Link>
         </motion.div>
 
         {/* Persona Card */}
@@ -195,10 +216,10 @@ const Demo = () => {
         >
           <div className="flex items-center gap-4">
             <div className="w-12 h-12 rounded-full bg-gradient-to-br from-primary to-primary/60 flex items-center justify-center text-primary-foreground font-bold text-lg">
-              AC
+              JK
             </div>
             <div className="flex-1">
-              <h2 className="font-semibold text-foreground">Alex Chen</h2>
+              <h2 className="font-semibold text-foreground">James Kelly</h2>
               <p className="text-sm text-muted-foreground">Founder · Series A pitch Thursday</p>
             </div>
             <div className="text-right">
@@ -259,45 +280,50 @@ const Demo = () => {
 
             {/* Day-specific content - REDUCED interventions */}
             
-            {/* Friday - Scanning visualization */}
+            {/* Friday - Domain explanation + Trust Settings + Scanning visualization */}
             {currentDay === "friday" && (
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="ahead-card"
-              >
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between text-sm">
-                    <span className="text-muted-foreground">Calendar events detected</span>
-                    <span className="font-semibold text-foreground">7</span>
-                  </div>
-                  <div className="flex items-center justify-between text-sm">
-                    <span className="text-muted-foreground">High-risk exposure events</span>
-                    <span className="font-semibold text-risk-high">3</span>
-                  </div>
-                  <div className="flex items-center justify-between text-sm">
-                    <span className="text-muted-foreground">Critical deadline</span>
-                    <span className="font-semibold text-foreground">Thursday pitch</span>
-                  </div>
-                  <div className="pt-3 border-t border-border/50">
+              <>
+                <DomainCard />
+                <TrustSettings threshold={80} />
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.1 }}
+                  className="ahead-card mt-4"
+                >
+                  <div className="space-y-3">
                     <div className="flex items-center justify-between text-sm">
-                      <span className="text-muted-foreground">Intervention confidence</span>
-                      <span className="font-semibold text-primary">87%</span>
+                      <span className="text-muted-foreground">Calendar events detected</span>
+                      <span className="font-semibold text-foreground">7</span>
                     </div>
-                    <div className="mt-2 h-2 bg-muted rounded-full overflow-hidden">
-                      <motion.div
-                        initial={{ width: 0 }}
-                        animate={{ width: "87%" }}
-                        transition={{ duration: 1, delay: 0.5 }}
-                        className="h-full bg-gradient-to-r from-primary to-primary/80 rounded-full"
-                      />
+                    <div className="flex items-center justify-between text-sm">
+                      <span className="text-muted-foreground">High-risk exposure events</span>
+                      <span className="font-semibold text-risk-high">3</span>
                     </div>
-                    <p className="text-xs text-muted-foreground mt-2">
-                      Threshold: 80% · <span className="text-primary">Will act</span>
-                    </p>
+                    <div className="flex items-center justify-between text-sm">
+                      <span className="text-muted-foreground">Critical deadline</span>
+                      <span className="font-semibold text-foreground">Thursday pitch</span>
+                    </div>
+                    <div className="pt-3 border-t border-border/50">
+                      <div className="flex items-center justify-between text-sm">
+                        <span className="text-muted-foreground">Intervention confidence</span>
+                        <span className="font-semibold text-primary">87%</span>
+                      </div>
+                      <div className="mt-2 h-2 bg-muted rounded-full overflow-hidden">
+                        <motion.div
+                          initial={{ width: 0 }}
+                          animate={{ width: "87%" }}
+                          transition={{ duration: 1, delay: 0.5 }}
+                          className="h-full bg-gradient-to-r from-primary to-primary/80 rounded-full"
+                        />
+                      </div>
+                      <p className="text-xs text-muted-foreground mt-2">
+                        Threshold: 80% · <span className="text-primary">Will act</span>
+                      </p>
+                    </div>
                   </div>
-                </div>
-              </motion.div>
+                </motion.div>
+              </>
             )}
 
             {/* Saturday - Supplement order with full reasoning */}
@@ -366,7 +392,7 @@ const Demo = () => {
                     </div>
                   </div>
                 </motion.div>
-                <SilenceLog moments={currentSilenceMoments} />
+                <SilenceLog moments={currentSilenceMoments} defaultExpanded={true} />
               </>
             )}
 
@@ -416,52 +442,12 @@ const Demo = () => {
               </motion.div>
             )}
 
-            {/* Thursday - Summary with restraint metrics */}
+            {/* Thursday - Summary with AI comparison and stakes */}
             {currentDay === "thursday" && (
-              <motion.div
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                className="ahead-card bg-gradient-to-br from-risk-low/10 via-card to-card"
-              >
-                <div className="text-center mb-6">
-                  <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-risk-low/20 mb-4">
-                    <CheckCircle2 className="w-8 h-8 text-risk-low" />
-                  </div>
-                  <h4 className="text-xl font-bold text-foreground mb-2">Protection Complete</h4>
-                  <p className="text-sm text-muted-foreground">Fewer interventions. Higher confidence.</p>
-                </div>
-                
-                <div className="space-y-4">
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="text-center p-3 rounded-xl bg-primary/5">
-                      <p className="text-2xl font-bold text-primary">2</p>
-                      <p className="text-xs text-muted-foreground">High-impact interventions</p>
-                    </div>
-                    <div className="text-center p-3 rounded-xl bg-muted/50">
-                      <p className="text-2xl font-bold text-muted-foreground">4</p>
-                      <p className="text-xs text-muted-foreground">Moments stayed silent</p>
-                    </div>
-                  </div>
-                  
-                  <div className="pt-4 border-t border-border/50 space-y-2">
-                    <div className="flex items-center justify-between text-sm">
-                      <span className="text-muted-foreground">Actions undone by user</span>
-                      <span className="font-semibold text-foreground">0</span>
-                    </div>
-                    <div className="flex items-center justify-between text-sm">
-                      <span className="text-muted-foreground">Confidence calibration</span>
-                      <span className="font-semibold text-primary">Unchanged</span>
-                    </div>
-                  </div>
-
-                  <div className="pt-4 border-t border-border/50">
-                    <p className="text-xs text-muted-foreground text-center">
-                      AHEAD acted only when confidence exceeded threshold.<br />
-                      When uncertain, it stayed silent.
-                    </p>
-                  </div>
-                </div>
-              </motion.div>
+              <>
+                <AIComparison />
+                <StakesOutcome />
+              </>
             )}
           </motion.div>
         </AnimatePresence>

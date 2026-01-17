@@ -11,10 +11,11 @@ interface SilenceMoment {
 
 interface SilenceLogProps {
   moments: SilenceMoment[];
+  defaultExpanded?: boolean;
 }
 
-export const SilenceLog = ({ moments }: SilenceLogProps) => {
-  const [isExpanded, setIsExpanded] = useState(false);
+export const SilenceLog = ({ moments, defaultExpanded = false }: SilenceLogProps) => {
+  const [isExpanded, setIsExpanded] = useState(defaultExpanded);
 
   if (moments.length === 0) return null;
 

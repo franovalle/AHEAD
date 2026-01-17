@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Syringe, Clock, MapPin, Calendar, Eye, ChevronDown, Brain, Activity } from "lucide-react";
+import { CompactConfidence } from "./CompactConfidence";
 
 interface Signal {
   label: string;
@@ -83,9 +84,14 @@ export const IVBookingCard = ({
             <span>In-home service · No travel needed</span>
           </div>
 
-          {/* Decision Reasoning */}
+          {/* Compact Confidence Bar - Always visible */}
           {showReasoning && signals.length > 0 && (
-            <div className="mt-3 pt-3 border-t border-border/50">
+            <CompactConfidence confidence={confidence} threshold={threshold} />
+          )}
+
+          {/* Full Decision Reasoning - Expandable */}
+          {showReasoning && signals.length > 0 && (
+            <div className="mt-2">
               <button
                 onClick={() => setIsExpanded(!isExpanded)}
                 className="flex items-center gap-2 text-xs text-muted-foreground hover:text-foreground transition-colors w-full"
