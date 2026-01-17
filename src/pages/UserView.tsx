@@ -1,7 +1,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { 
   Settings, Shield, ChevronRight, ShoppingBag, 
-  Syringe, Check, Undo2, Dumbbell
+  Syringe, Check, Undo2
 } from "lucide-react";
 import { useState } from "react";
 import { ViewToggle } from "@/components/ahead/ViewToggle";
@@ -13,7 +13,7 @@ const initialActivityLog = [
     title: "Immunity supplements",
     time: "Saturday, 9:15 AM",
     status: "Delivered",
-    reason: "Your calendar showed a pitch Thursday. AHEAD ordered supplements 72 hours ahead for best effectiveness.",
+    reason: "Stress weakens your immune system. AHEAD ordered supplements 72 hours before your pitch to keep your defenses strong against colds.",
   },
   {
     id: 2,
@@ -21,22 +21,21 @@ const initialActivityLog = [
     title: "IV therapy session",
     time: "Tuesday, 3:45 PM",
     status: "Confirmed",
-    reason: "Scheduled 36 hours before your pitch — optimal timing for hydration and immune support.",
+    reason: "Hydration plus vitamins prevent the fatigue that makes you vulnerable to colds. Scheduled 36 hours before your pitch.",
   },
   {
     id: 3,
-    type: "recovery" as const,
-    title: "Recovery session",
+    type: "booking" as const,
+    title: "Immunity IV drip",
     time: "Saturday, 10:00 AM",
     status: "Booked",
-    reason: "Post-pitch recovery at Restore Hyper Wellness. Your calendar was clear Saturday morning.",
+    reason: "After high-stress events, your immune system dips for 24-48 hours. This prevents the post-pitch crash that often leads to colds.",
   },
 ];
 
 const typeConfig = {
   order: { icon: ShoppingBag, color: "text-primary", bg: "bg-primary/10" },
   booking: { icon: Syringe, color: "text-accent", bg: "bg-accent/10" },
-  recovery: { icon: Dumbbell, color: "text-primary", bg: "bg-primary/10" },
 };
 
 const UserView = () => {
@@ -81,7 +80,7 @@ const UserView = () => {
           className="mb-6"
         >
           <h2 className="text-2xl font-bold text-foreground">Good evening, James</h2>
-          <p className="text-sm text-muted-foreground mt-1">Thursday · Pitch day</p>
+          <p className="text-sm text-muted-foreground mt-1">Thursday · Pitch day · Flu season</p>
         </motion.div>
 
         {/* Status Card - Simplified */}
@@ -96,8 +95,8 @@ const UserView = () => {
               <Shield className="w-6 h-6 text-risk-low" />
             </div>
             <div className="flex-1">
-              <h3 className="font-semibold text-foreground">Ready for your pitch</h3>
-              <p className="text-sm text-muted-foreground">AHEAD handled {activityLog.length} things this week</p>
+              <h3 className="font-semibold text-foreground">Protected for pitch day</h3>
+              <p className="text-sm text-muted-foreground">AHEAD handled {activityLog.length} things to keep you healthy</p>
             </div>
             <div className="p-2 rounded-full bg-risk-low/10">
               <Check className="w-5 h-5 text-risk-low" />
