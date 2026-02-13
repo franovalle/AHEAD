@@ -1,7 +1,7 @@
 # AHEAD 
 
-**Anticipatory Health Early-intervention Advisory Delegate**␣␣
-Grand Prize Winner — Aurora Consumer AI Hackathon, January 2026
+**Anticipatory Health Early-intervention Advisory Delegate**
+#Grand Prize Winner — Aurora Consumer AI Hackathon, January 2026
 
 An AI delegate that anticipates health risks and intervenes early — acting only when confident, staying silent when not.
 
