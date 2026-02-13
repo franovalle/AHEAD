@@ -1,4 +1,4 @@
-# AHEAD - **Anticipatory Health Early-intervention Advisory Delegate**
+# AHEAD : **Anticipatory Health Early-intervention Advisory Delegate**
 
 
 Grand Prize Winner — Aurora Consumer AI Hackathon, January 2026
